@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wearable-insights/contracts/live_anomaly.schema.json",
+  "title": "LiveAnomaly",
+  "description": "A deterministically detected, sustained deviation of a live intraday signal from the day's expected level. Schema-compatible with the existing Anomaly (anomaly.schema.json) — this contract documents the live-specific value space (new codes/themes) and the detection provenance fields.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["code", "theme", "severity", "signals", "evaluation_tag", "detail"],
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Anomaly code. Live detection uses the reused/added values below.",
+      "enum": [
+        "hrv_depressed",
+        "hr_elevated",
+        "resp_rate_elevated",
+        "spo2_low",
+        "skin_temp_elevated"
+      ]
+    },
+    "theme": {
+      "type": "string",
+      "description": "Grouping theme. Live detection uses recovery (HRV), stress (HR), and the new vitals theme (SpO2, skin temp, respiration).",
+      "enum": ["recovery", "stress", "vitals"]
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["moderate", "significant", "critical"],
+      "description": "Mapped from abs(percentage_change) against the existing ANOMALY_*_PCT / CRITICAL_THRESHOLD_PCT tiers."
+    },
+    "signals": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["hr", "hrv", "spo2", "skin_temp", "resp_rate"]
+      },
+      "description": "Live signal key(s) that triggered the anomaly."
+    },
+    "evaluation_tag": {
+      "type": "string",
+      "enum": [
+        "Significantly Elevated",
+        "Significantly Depressed",
+        "Critically Elevated",
+        "Critically Depressed",
+        "Stable / Within Normal Baseline"
+      ],
+      "description": "Deterministic label derived from the sign of the deviation and its severity tier."
+    },
+    "detail": {
+      "type": "string",
+      "description": "Human-readable provenance, e.g. 'spo2 8.2% below day's expected level (live 30-min trend)'."
+    }
+  }
+}

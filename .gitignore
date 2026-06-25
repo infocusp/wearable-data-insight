@@ -1,0 +1,11 @@
+.claude/
+.specify/
+Pipfile
+*__pycache__/
+.env
+*.zip
+/pmdata/
+/data/
+*.db
+.streamlit/
+infocusp_wearable_demo_v2.html

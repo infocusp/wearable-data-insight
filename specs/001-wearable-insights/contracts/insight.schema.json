@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wearable-insights/contracts/insight.schema.json",
+  "title": "InsightSet",
+  "description": "User-facing, schema-validated insight payload returned by the LLM under the messages.parse contract and re-validated by safety.py (FR-013, FR-016). Hybrid: structured JSON whose `summary` carries an associative, non-diagnostic narrative.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["insights", "disclaimer", "generated_from", "schema_version"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "disclaimer": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Informational-only, non-medical disclaimer (FR-019)."
+    },
+    "generated_from": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Union of source signals/trends across insights, for the explainability view (SC-007)."
+    },
+    "insights": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/insight" }
+    }
+  },
+  "$defs": {
+    "insight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "summary", "action", "confidence", "source_signals"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Empathetic physiological narrative; associative language only, no diagnosis or causation (FR-014, FR-017)."
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exactly one concrete, physically actionable directive for today (FR-015)."
+        },
+        "confidence": { "type": "string", "enum": ["low", "medium", "high"] },
+        "source_signals": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

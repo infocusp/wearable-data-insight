@@ -1,0 +1,375 @@
+{
+  "user_id": "usr_recovery_deficit",
+  "analysis_date": "2026-06-17",
+  "sleep": {
+    "sleep_duration": {
+      "current_value": 343.0,
+      "weekly": {
+        "baseline_value": 516.1,
+        "percentage_change": -33.5,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "monthly": {
+        "baseline_value": 515.1,
+        "percentage_change": -33.4,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "weekday": {
+        "baseline_value": 525.5,
+        "percentage_change": -34.7,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "sixty_day": {
+        "baseline_value": 515.1,
+        "percentage_change": -33.4,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "ninety_day": {
+        "baseline_value": 515.1,
+        "percentage_change": -33.4,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "flags": [
+        "below_baseline_sleep_duration",
+        "bedtime_shift_later",
+        "inconsistent_sleep_timing"
+      ]
+    },
+    "sleep_score": {
+      "current_value": 31.0,
+      "weekly": {
+        "baseline_value": 85.0,
+        "percentage_change": -63.5,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "monthly": {
+        "baseline_value": 86.0,
+        "percentage_change": -64.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "weekday": {
+        "baseline_value": 88.0,
+        "percentage_change": -64.8,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "sixty_day": {
+        "baseline_value": 86.0,
+        "percentage_change": -64.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "ninety_day": {
+        "baseline_value": 86.0,
+        "percentage_change": -64.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "flags": [
+        "below_baseline_sleep_score",
+        "critical_deviation"
+      ]
+    },
+    "deep_sleep": {
+      "current_value": 55.0,
+      "weekly": {
+        "baseline_value": 104.3,
+        "percentage_change": -47.3,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "monthly": {
+        "baseline_value": 105.0,
+        "percentage_change": -47.6,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "weekday": {
+        "baseline_value": 106.2,
+        "percentage_change": -48.2,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "sixty_day": {
+        "baseline_value": 105.0,
+        "percentage_change": -47.6,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "ninety_day": {
+        "baseline_value": 105.0,
+        "percentage_change": -47.6,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "flags": [
+        "below_baseline_deep_sleep"
+      ]
+    },
+    "rem_sleep": {
+      "current_value": 50.0,
+      "weekly": {
+        "baseline_value": 89.9,
+        "percentage_change": -44.4,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "monthly": {
+        "baseline_value": 89.9,
+        "percentage_change": -44.4,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "weekday": {
+        "baseline_value": 92.2,
+        "percentage_change": -45.8,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "sixty_day": {
+        "baseline_value": 89.9,
+        "percentage_change": -44.4,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "ninety_day": {
+        "baseline_value": 89.9,
+        "percentage_change": -44.4,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "flags": [
+        "below_baseline_rem_sleep"
+      ]
+    }
+  },
+  "heart_health": {
+    "resting_hr": {
+      "current_value": 70.0,
+      "weekly": {
+        "baseline_value": 57.0,
+        "percentage_change": 22.8,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "monthly": {
+        "baseline_value": 57.0,
+        "percentage_change": 22.8,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "weekday": {
+        "baseline_value": 55.0,
+        "percentage_change": 27.3,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "sixty_day": {
+        "baseline_value": 57.0,
+        "percentage_change": 22.8,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "ninety_day": {
+        "baseline_value": 57.0,
+        "percentage_change": 22.8,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "flags": [
+        "above_baseline_resting_hr"
+      ]
+    },
+    "hrv": {
+      "current_value": 77.2,
+      "weekly": {
+        "baseline_value": 118.8,
+        "percentage_change": -35.0,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "monthly": {
+        "baseline_value": 119.8,
+        "percentage_change": -35.6,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "weekday": {
+        "baseline_value": 122.6,
+        "percentage_change": -37.0,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "sixty_day": {
+        "baseline_value": 119.8,
+        "percentage_change": -35.6,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "ninety_day": {
+        "baseline_value": 119.8,
+        "percentage_change": -35.6,
+        "trend": "down",
+        "evaluation_tag": "Significantly Depressed"
+      },
+      "flags": [
+        "below_baseline_hrv"
+      ]
+    },
+    "stress": {
+      "current_value": 62.0,
+      "weekly": {
+        "baseline_value": 14.0,
+        "percentage_change": 342.9,
+        "trend": "up",
+        "evaluation_tag": "Critically Elevated"
+      },
+      "monthly": {
+        "baseline_value": 14.0,
+        "percentage_change": 342.9,
+        "trend": "up",
+        "evaluation_tag": "Critically Elevated"
+      },
+      "weekday": {
+        "baseline_value": 12.0,
+        "percentage_change": 416.7,
+        "trend": "up",
+        "evaluation_tag": "Critically Elevated"
+      },
+      "sixty_day": {
+        "baseline_value": 14.0,
+        "percentage_change": 342.9,
+        "trend": "up",
+        "evaluation_tag": "Critically Elevated"
+      },
+      "ninety_day": {
+        "baseline_value": 14.0,
+        "percentage_change": 342.9,
+        "trend": "up",
+        "evaluation_tag": "Critically Elevated"
+      },
+      "flags": [
+        "above_baseline_stress",
+        "critical_deviation"
+      ]
+    }
+  },
+  "activity": {
+    "steps": {
+      "current_value": 0.0,
+      "weekly": {
+        "baseline_value": 7822.0,
+        "percentage_change": -100.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "monthly": {
+        "baseline_value": 7789.0,
+        "percentage_change": -100.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "weekday": {
+        "baseline_value": 8567.0,
+        "percentage_change": -100.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "sixty_day": {
+        "baseline_value": 7789.0,
+        "percentage_change": -100.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "ninety_day": {
+        "baseline_value": 7789.0,
+        "percentage_change": -100.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "flags": [
+        "below_baseline_steps",
+        "critical_deviation"
+      ]
+    },
+    "active_minutes": {
+      "current_value": 0.0,
+      "weekly": {
+        "baseline_value": 68.3,
+        "percentage_change": -100.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "monthly": {
+        "baseline_value": 72.1,
+        "percentage_change": -100.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "weekday": {
+        "baseline_value": 73.8,
+        "percentage_change": -100.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "sixty_day": {
+        "baseline_value": 72.1,
+        "percentage_change": -100.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "ninety_day": {
+        "baseline_value": 72.1,
+        "percentage_change": -100.0,
+        "trend": "down",
+        "evaluation_tag": "Critically Depressed"
+      },
+      "flags": [
+        "below_baseline_active_minutes",
+        "critical_deviation"
+      ]
+    }
+  },
+  "candidate_associations": [
+    {
+      "relation": "poor_sleep_and_higher_stress_co_occur",
+      "signals": [
+        "sleep_duration",
+        "stress"
+      ],
+      "description": "Lower-than-usual sleep and higher-than-usual stress appear to be co-occurring today; these two patterns are often associated and may be influencing each other.",
+      "kind": "association"
+    },
+    {
+      "relation": "lower_activity_and_lower_sleep_co_occur",
+      "signals": [
+        "steps",
+        "sleep_duration"
+      ],
+      "description": "Both your activity level and sleep are below your usual baseline today; reduced movement and shorter sleep are often associated with each other.",
+      "kind": "association"
+    },
+    {
+      "relation": "reduced_recovery_and_higher_stress_co_occur",
+      "signals": [
+        "hrv",
+        "stress"
+      ],
+      "description": "Lower-than-usual heart rate variability and elevated stress appear to co-occur today; both may reflect a similar underlying recovery state.",
+      "kind": "association"
+    }
+  ],
+  "data_quality": {
+    "missing_fields": [],
+    "invalid_fields": [],
+    "low_confidence": false
+  },
+  "schema_version": "1.0"
+}

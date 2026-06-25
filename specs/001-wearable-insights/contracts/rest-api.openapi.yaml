@@ -1,0 +1,121 @@
+openapi: 3.1.0
+info:
+  title: Wearable Insights API (Phase 1, optional slice)
+  version: "1.0.0"
+  description: >
+    Thin HTTP surface over the Wearable Insights engine (User Story 6, FR-020). Reuses the
+    same analytics and LLM modules as the CLI and Streamlit app — no duplicated logic.
+    Stateless single-pass; records submitted in a request are analyzed for that request.
+servers:
+  - url: http://localhost:8000
+paths:
+  /ingest:
+    post:
+      summary: Submit canonical daily records for a user
+      operationId: ingest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [records]
+              properties:
+                records:
+                  type: array
+                  minItems: 1
+                  items:
+                    $ref: "./canonical_record.schema.json"
+      responses:
+        "200":
+          description: Records accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, accepted]
+                properties:
+                  status: { type: string, enum: [success] }
+                  accepted: { type: integer, description: number of records accepted }
+                  rejected: { type: integer, description: number of records quarantined }
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /generate-insights:
+    post:
+      summary: Generate insights for a user/date from previously ingested or inline records
+      operationId: generateInsights
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [user_id, analysis_date]
+              properties:
+                user_id: { type: string }
+                analysis_date: { type: string, format: date }
+                records:
+                  type: array
+                  description: optional inline records if not pre-ingested
+                  items:
+                    $ref: "./canonical_record.schema.json"
+      responses:
+        "200":
+          description: Generated insight payload
+          content:
+            application/json:
+              schema:
+                $ref: "./insight.schema.json"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "422":
+          description: Model output failed validation after retries
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "502":
+          description: Upstream LLM unavailable or errored
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+  /comparison-json:
+    get:
+      summary: Retrieve the intermediate comparison object for a user/date (debugging, FR-022)
+      operationId: getComparison
+      parameters:
+        - in: query
+          name: user_id
+          required: true
+          schema: { type: string }
+        - in: query
+          name: analysis_date
+          required: true
+          schema: { type: string, format: date }
+      responses:
+        "200":
+          description: The comparison object used for inference
+          content:
+            application/json:
+              schema:
+                $ref: "./comparison_object.schema.json"
+        "404":
+          description: No data for the given user/date
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+components:
+  responses:
+    BadRequest:
+      description: Malformed request
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error: { type: string }
+        detail: { type: string }

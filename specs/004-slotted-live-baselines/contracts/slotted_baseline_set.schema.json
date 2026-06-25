@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "slotted_baseline_set.schema.json",
+  "title": "SlottedBaselineSet (internal diagnostic shape)",
+  "description": "In-memory per-session slotted baseline set — never serialised to the LLM. This schema documents the logical structure for testing and explainability.",
+  "type": "object",
+  "required": ["horizons", "min_samples"],
+  "properties": {
+    "horizons": {
+      "type": "array",
+      "items": { "type": "integer", "minimum": 1 },
+      "minItems": 1,
+      "description": "Active look-back horizons in days, e.g. [7, 30]"
+    },
+    "min_samples": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Minimum bucket sample count for a bucket to be considered reliable"
+    },
+    "flat_anchors": {
+      "type": "object",
+      "description": "Fallback flat signal anchors keyed by signal name",
+      "additionalProperties": { "type": "number" }
+    }
+  },
+  "additionalProperties": true
+}

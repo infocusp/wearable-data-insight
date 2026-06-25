@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wearable-insights/contracts/chat_message.schema.json",
+  "title": "ChatSession",
+  "description": "In-memory, session-scoped conversation bound to one nudge. Not persisted beyond the session.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["nudge_id", "turns", "grounding"],
+  "properties": {
+    "nudge_id": {
+      "type": "string",
+      "description": "The nudge this chat is grounded in."
+    },
+    "turns": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ChatTurn" }
+    },
+    "grounding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nudge", "comparison"],
+      "description": "The only data the assistant may reference (FR-009).",
+      "properties": {
+        "nudge": {
+          "$ref": "nudge.schema.json#/$defs/Nudge"
+        },
+        "comparison": {
+          "$ref": "https://wearable-insights/contracts/comparison_object.schema.json"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ChatTurn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "content"],
+      "properties": {
+        "role": { "type": "string", "enum": ["user", "assistant"] },
+        "content": { "type": "string" }
+      }
+    }
+  }
+}

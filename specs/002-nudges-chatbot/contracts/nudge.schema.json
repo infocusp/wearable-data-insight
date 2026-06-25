@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wearable-insights/contracts/nudge.schema.json",
+  "title": "NudgeSet",
+  "description": "The bounded set of nudges raised for one user/day. Empty on a clean (no-anomaly) day.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["user_id", "analysis_date", "nudges", "schema_version"],
+  "properties": {
+    "user_id": { "type": "string" },
+    "analysis_date": { "type": "string", "format": "date" },
+    "schema_version": { "type": "string" },
+    "nudges": {
+      "type": "array",
+      "description": "0..MAX_NUDGES_PER_DAY items (default cap 3). Empty list on a clean day.",
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/Nudge" }
+    }
+  },
+  "$defs": {
+    "Nudge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nudge_id",
+        "user_id",
+        "analysis_date",
+        "theme",
+        "severity",
+        "anomalies",
+        "insight",
+        "disclaimer",
+        "triggered_by"
+      ],
+      "properties": {
+        "nudge_id": { "type": "string" },
+        "user_id": { "type": "string" },
+        "analysis_date": { "type": "string", "format": "date" },
+        "theme": {
+          "type": "string",
+          "enum": ["sleep", "recovery", "activity", "stress"]
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["moderate", "significant", "critical"]
+        },
+        "anomalies": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "anomaly.schema.json" }
+        },
+        "insight": { "$ref": "#/$defs/Insight" },
+        "disclaimer": { "type": "string", "minLength": 1 },
+        "triggered_by": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Union of anomaly signals; the explainability provenance."
+        }
+      }
+    },
+    "Insight": {
+      "type": "object",
+      "description": "Reused unchanged from Phase 1 (contracts/insight.schema.json).",
+      "additionalProperties": false,
+      "required": ["title", "summary", "action", "confidence", "source_signals"],
+      "properties": {
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "action": { "type": "string" },
+        "confidence": { "type": "string", "enum": ["low", "medium", "high"] },
+        "source_signals": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

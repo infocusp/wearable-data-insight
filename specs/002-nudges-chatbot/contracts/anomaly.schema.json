@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wearable-insights/contracts/anomaly.schema.json",
+  "title": "Anomaly",
+  "description": "A deterministically detected deviation for one day, derived from the ComparisonObject. Produced by anomaly.py, never by the LLM.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["code", "theme", "severity", "signals", "evaluation_tag", "detail"],
+  "properties": {
+    "code": {
+      "type": "string",
+      "enum": [
+        "stress_elevated",
+        "steps_low",
+        "active_minutes_low",
+        "sleep_insufficient",
+        "sleep_quality_low",
+        "hrv_depressed",
+        "hr_elevated",
+        "spo2_low",
+        "skin_temp_elevated",
+        "resp_rate_elevated"
+      ],
+      "description": "Stable identifier for the anomaly rule that fired (incl. Feature 003 live-stream codes)."
+    },
+    "theme": {
+      "type": "string",
+      "enum": ["sleep", "recovery", "activity", "stress", "vitals"],
+      "description": "Grouping theme used when consolidating anomalies into nudges."
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["moderate", "significant", "critical"],
+      "description": "Mapped from the triggering metric's evaluation_tag."
+    },
+    "signals": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Comparison signal keys that triggered the anomaly (provenance)."
+    },
+    "evaluation_tag": {
+      "type": "string",
+      "description": "Copied from the triggering MetricComparison for traceability."
+    },
+    "detail": {
+      "type": "string",
+      "description": "Short deterministic description, e.g. 'stress 28% above 30-day baseline'."
+    }
+  }
+}

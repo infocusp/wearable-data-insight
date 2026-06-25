@@ -1,0 +1,21 @@
+{
+  "nudge_id": "usr_recovery_deficit_2026-06-17_stress",
+  "turns": [
+    {
+      "role": "user",
+      "content": "Why was this nudge raised?"
+    },
+    {
+      "role": "assistant",
+      "content": "Your stress score today was notably higher than your recent typical range, which may be associated with how your body is managing recovery. Based on your data, taking a short walk this evening might help ease tension. This information is for general wellness purposes only and is not a substitute for professional medical advice."
+    },
+    {
+      "role": "user",
+      "content": "Is a short walk enough?"
+    },
+    {
+      "role": "assistant",
+      "content": "A short walk can be a helpful starting point — gentle movement is often associated with stress regulation. It does not need to be intense; even 10–15 minutes at a comfortable pace may be beneficial. This information is for general wellness purposes only and is not a substitute for professional medical advice."
+    }
+  ]
+}

@@ -1,0 +1,327 @@
+{
+  "user_id": "usr_healthy_consistent",
+  "analysis_date": "2026-06-17",
+  "sleep": {
+    "sleep_duration": {
+      "current_value": 523.0,
+      "weekly": {
+        "baseline_value": 516.9,
+        "percentage_change": 1.2,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "monthly": {
+        "baseline_value": 515.9,
+        "percentage_change": 1.4,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "weekday": {
+        "baseline_value": 528.8,
+        "percentage_change": -1.1,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "sixty_day": {
+        "baseline_value": 515.9,
+        "percentage_change": 1.4,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "ninety_day": {
+        "baseline_value": 515.9,
+        "percentage_change": 1.4,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "flags": []
+    },
+    "sleep_score": {
+      "current_value": 87.0,
+      "weekly": {
+        "baseline_value": 85.0,
+        "percentage_change": 2.4,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "monthly": {
+        "baseline_value": 86.0,
+        "percentage_change": 1.2,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "weekday": {
+        "baseline_value": 88.0,
+        "percentage_change": -1.1,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "sixty_day": {
+        "baseline_value": 86.0,
+        "percentage_change": 1.2,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "ninety_day": {
+        "baseline_value": 86.0,
+        "percentage_change": 1.2,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "flags": []
+    },
+    "deep_sleep": {
+      "current_value": 107.0,
+      "weekly": {
+        "baseline_value": 104.0,
+        "percentage_change": 2.9,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "monthly": {
+        "baseline_value": 105.0,
+        "percentage_change": 1.9,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "weekday": {
+        "baseline_value": 106.5,
+        "percentage_change": 0.5,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "sixty_day": {
+        "baseline_value": 105.0,
+        "percentage_change": 1.9,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "ninety_day": {
+        "baseline_value": 105.0,
+        "percentage_change": 1.9,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "flags": []
+    },
+    "rem_sleep": {
+      "current_value": 91.0,
+      "weekly": {
+        "baseline_value": 89.9,
+        "percentage_change": 1.2,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "monthly": {
+        "baseline_value": 90.0,
+        "percentage_change": 1.1,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "weekday": {
+        "baseline_value": 93.0,
+        "percentage_change": -2.2,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "sixty_day": {
+        "baseline_value": 90.0,
+        "percentage_change": 1.1,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "ninety_day": {
+        "baseline_value": 90.0,
+        "percentage_change": 1.1,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "flags": []
+    }
+  },
+  "heart_health": {
+    "resting_hr": {
+      "current_value": 54.0,
+      "weekly": {
+        "baseline_value": 57.0,
+        "percentage_change": -5.3,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "monthly": {
+        "baseline_value": 57.0,
+        "percentage_change": -5.3,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "weekday": {
+        "baseline_value": 55.0,
+        "percentage_change": -1.8,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "sixty_day": {
+        "baseline_value": 57.0,
+        "percentage_change": -5.3,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "ninety_day": {
+        "baseline_value": 57.0,
+        "percentage_change": -5.3,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "flags": []
+    },
+    "hrv": {
+      "current_value": 122.3,
+      "weekly": {
+        "baseline_value": 118.9,
+        "percentage_change": 2.9,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "monthly": {
+        "baseline_value": 120.1,
+        "percentage_change": 1.8,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "weekday": {
+        "baseline_value": 123.7,
+        "percentage_change": -1.1,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "sixty_day": {
+        "baseline_value": 120.1,
+        "percentage_change": 1.8,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "ninety_day": {
+        "baseline_value": 120.1,
+        "percentage_change": 1.8,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "flags": []
+    },
+    "stress": {
+      "current_value": 16.0,
+      "weekly": {
+        "baseline_value": 14.0,
+        "percentage_change": 14.3,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "monthly": {
+        "baseline_value": 14.0,
+        "percentage_change": 14.3,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "weekday": {
+        "baseline_value": 11.0,
+        "percentage_change": 45.5,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "sixty_day": {
+        "baseline_value": 14.0,
+        "percentage_change": 14.3,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "ninety_day": {
+        "baseline_value": 14.0,
+        "percentage_change": 14.3,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "flags": []
+    }
+  },
+  "activity": {
+    "steps": {
+      "current_value": 9384.0,
+      "weekly": {
+        "baseline_value": 8101.0,
+        "percentage_change": 15.8,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "monthly": {
+        "baseline_value": 8058.0,
+        "percentage_change": 16.5,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "weekday": {
+        "baseline_value": 9046.0,
+        "percentage_change": 3.7,
+        "trend": "stable",
+        "evaluation_tag": "Stable / Within Normal Baseline"
+      },
+      "sixty_day": {
+        "baseline_value": 8058.0,
+        "percentage_change": 16.5,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "ninety_day": {
+        "baseline_value": 8058.0,
+        "percentage_change": 16.5,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "flags": [
+        "above_baseline_steps"
+      ]
+    },
+    "active_minutes": {
+      "current_value": 93.0,
+      "weekly": {
+        "baseline_value": 69.9,
+        "percentage_change": 33.0,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "monthly": {
+        "baseline_value": 74.5,
+        "percentage_change": 24.8,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "weekday": {
+        "baseline_value": 76.5,
+        "percentage_change": 21.6,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "sixty_day": {
+        "baseline_value": 74.5,
+        "percentage_change": 24.8,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "ninety_day": {
+        "baseline_value": 74.5,
+        "percentage_change": 24.8,
+        "trend": "up",
+        "evaluation_tag": "Significantly Elevated"
+      },
+      "flags": [
+        "above_baseline_active_minutes"
+      ]
+    }
+  },
+  "candidate_associations": [],
+  "data_quality": {
+    "missing_fields": [],
+    "invalid_fields": [],
+    "low_confidence": false
+  },
+  "schema_version": "1.0"
+}
