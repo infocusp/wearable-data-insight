@@ -24,13 +24,12 @@ from . import store
 from .config import (
     ANTHROPIC_API_KEY,
     CHAT_MODEL,
-    GCP_LOCATION,
-    GCP_PROJECT,
     MEMORY_MAX_FACTS,
     MEMORY_MAX_SUMMARIES,
     MEMORY_PATTERN_LOOKBACK_DAYS,
     MODEL_OPTIONS,
 )
+from .llm.google_client import make_google_client
 
 # ── Deterministic recurring patterns ──────────────────────────────────────────
 
@@ -119,12 +118,9 @@ def _complete_text(system: str, user: str, model: str) -> str:
         return resp.content[0].text
 
     if provider == "google":
-        if not GCP_PROJECT:
-            raise RuntimeError("GCP_PROJECT is not set.")
-        from google import genai
         from google.genai import types
 
-        client = genai.Client(vertexai=True, project=GCP_PROJECT, location=GCP_LOCATION)
+        client = make_google_client()
         resp = client.models.generate_content(
             model=model,
             contents=[{"role": "user", "parts": [{"text": user}]}],

@@ -2,15 +2,9 @@
 
 from __future__ import annotations
 
-from ..config import (
-    ANTHROPIC_API_KEY,
-    GCP_LOCATION,
-    GCP_PROJECT,
-    MODEL_OPTIONS,
-    WEARABLE_MODEL,
-    get_api_key_for_model,
-)
+from ..config import ANTHROPIC_API_KEY, MODEL_OPTIONS, WEARABLE_MODEL
 from ..models import ComparisonObject, InsightSet
+from .google_client import make_google_client
 from .prompt import SYSTEM_TEXT, build_user_payload
 
 _MAX_TOKENS = 8192
@@ -53,15 +47,9 @@ def _call_anthropic(comparison: ComparisonObject, model: str) -> InsightSet:
 # ── Google ────────────────────────────────────────────────────────────────────
 
 def _call_google(comparison: ComparisonObject, model: str) -> InsightSet:
-    if not GCP_PROJECT:
-        raise RuntimeError(
-            "GCP_PROJECT is not set. "
-            "Export it in your environment before running the LLM pipeline."
-        )
-    from google import genai
     from google.genai import types
 
-    client = genai.Client(vertexai=True, project=GCP_PROJECT, location=GCP_LOCATION)
+    client = make_google_client()
     user_payload = build_user_payload(comparison)
     user_text = user_payload[0]["content"]
 

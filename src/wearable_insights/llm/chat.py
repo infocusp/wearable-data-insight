@@ -21,8 +21,9 @@ sent to the model must start with a user turn.  ``memory_block`` (see
 
 from __future__ import annotations
 
-from ..config import ANTHROPIC_API_KEY, CHAT_MODEL, GCP_LOCATION, GCP_PROJECT, MODEL_OPTIONS
+from ..config import ANTHROPIC_API_KEY, CHAT_MODEL, MODEL_OPTIONS
 from ..models import ComparisonObject, Nudge, NudgeSet
+from .google_client import make_google_client
 from .prompt import CHAT_SYSTEM_TEXT, build_chat_context, build_day_context
 from .tools import TOOLS, execute_tool
 
@@ -180,15 +181,9 @@ def _anthropic_reply(
 
 
 def _google_reply(context: str, real_turns: list[dict], model: str) -> str:
-    if not GCP_PROJECT:
-        raise RuntimeError(
-            "GCP_PROJECT is not set. "
-            "Export it in your environment to use the chatbot."
-        )
-    from google import genai
     from google.genai import types
 
-    client = genai.Client(vertexai=True, project=GCP_PROJECT, location=GCP_LOCATION)
+    client = make_google_client()
 
     # Google uses "user"/"model" roles.
     contents: list[dict] = [

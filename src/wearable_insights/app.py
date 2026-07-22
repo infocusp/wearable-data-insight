@@ -566,25 +566,33 @@ def main() -> None:
     _pmdata_root = str(pmdata_root_from_env(
         str(Path(__file__).resolve().parent.parent.parent / "pmdata")
     ))
+    # The PMData set is a 3 GB local-only download; on hosted deploys (no pmdata/
+    # folder present) the toggle is hidden rather than left to error on selection.
+    _pmdata_available = Path(_pmdata_root).is_dir() and any(Path(_pmdata_root).iterdir())
+    if not _pmdata_available:
+        st.session_state.data_source = "synthetic"
 
     # ── Sidebar ────────────────────────────────────────────────────────────────
     with st.sidebar:
         st.header("Settings")
 
-        data_source = st.radio(
-            "Data source",
-            options=["synthetic", "pmdata"],
-            format_func=lambda s: "Synthetic (demo)" if s == "synthetic" else "Real World (PMData)",
-            horizontal=True,
-            index=0 if st.session_state.data_source == "synthetic" else 1,
-        )
-        if data_source != st.session_state.data_source:
-            st.session_state.data_source = data_source
-            st.session_state.active_comparison = None
-            st.session_state.nudge_set = None
-            st.session_state.active_session_id = None
-            st.session_state.live_buffer = None
-            st.session_state.live_slotted_baselines = None
+        if _pmdata_available:
+            data_source = st.radio(
+                "Data source",
+                options=["synthetic", "pmdata"],
+                format_func=lambda s: "Synthetic (demo)" if s == "synthetic" else "Real World (PMData)",
+                horizontal=True,
+                index=0 if st.session_state.data_source == "synthetic" else 1,
+            )
+            if data_source != st.session_state.data_source:
+                st.session_state.data_source = data_source
+                st.session_state.active_comparison = None
+                st.session_state.nudge_set = None
+                st.session_state.active_session_id = None
+                st.session_state.live_buffer = None
+                st.session_state.live_slotted_baselines = None
+        else:
+            data_source = "synthetic"
 
         st.divider()
 

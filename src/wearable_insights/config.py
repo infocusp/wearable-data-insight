@@ -18,9 +18,14 @@ load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 ANTHROPIC_API_KEY: str | None = os.getenv("ANTHROPIC_API_KEY")
 
-# GCP project config for Vertex AI (replaces API key auth).
+# GCP project config for Vertex AI (local dev auth via `gcloud auth application-default login`).
 GCP_PROJECT: str | None = os.getenv("GCP_PROJECT")
 GCP_LOCATION: str = os.getenv("GCP_LOCATION", "us-central1")
+
+# Gemini Developer API key (AI Studio) — simpler alternative to Vertex AI for
+# environments without GCP service-account credentials (e.g. hosted demos).
+# When both are set, GEMINI_API_KEY takes precedence; see llm/google_client.py.
+GEMINI_API_KEY: str | None = os.getenv("GEMINI_API_KEY")
 
 # Default model — override via WEARABLE_MODEL env var.
 WEARABLE_MODEL: str = os.getenv("WEARABLE_MODEL", "gemini-2.5-flash-lite")
@@ -55,7 +60,7 @@ def get_api_key_for_model(model: str) -> str | None:
     info = MODEL_OPTIONS.get(model, {})
     env_var = info.get("api_key_env")
     if env_var == "GCP_PROJECT":
-        return GCP_PROJECT
+        return GEMINI_API_KEY or GCP_PROJECT
     if env_var == "ANTHROPIC_API_KEY":
         return ANTHROPIC_API_KEY
     return None
