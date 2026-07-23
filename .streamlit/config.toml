@@ -1,0 +1,16 @@
+# Committed so Streamlit Community Cloud (and any local run) picks up the same
+# dark, Infocusp-branded theme before the app's own CSS (ui/theme.py) loads.
+# Do NOT put secrets here — see .streamlit/secrets.toml.example (secrets.toml itself
+# is gitignored).
+
+[theme]
+base = "dark"
+primaryColor = "#00C6FF"
+backgroundColor = "#0D1E45"
+secondaryBackgroundColor = "#132450"
+textColor = "#EDF2FF"
+font = "sans serif"
+
+[server]
+enableXsrfProtection = true
+maxUploadSize = 5

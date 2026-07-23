@@ -7,5 +7,5 @@ Pipfile
 /pmdata/
 /data/
 *.db
-.streamlit/
+.streamlit/secrets.toml
 infocusp_wearable_demo_v2.html
