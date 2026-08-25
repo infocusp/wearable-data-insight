@@ -1,0 +1,35 @@
+# FastAPI sidecar image (ClaimGuard integration).
+#
+# Kept separate from the existing Dockerfile on purpose: that one targets Hugging Face
+# Spaces (EXPOSE 7860, Streamlit entrypoint) and changing it would break that deploy.
+#
+# Do not deploy this on a scale-to-zero plan without accepting a ~1s warm cost on every
+# cold start: the lifespan hook pre-builds the slotted baselines for all five personas.
+FROM python:3.12-slim
+
+WORKDIR /app
+RUN useradd -m -u 1000 user
+
+COPY --chown=user requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
+
+COPY --chown=user . .
+USER user
+
+# PYTHONPATH is REQUIRED: this repo has no pyproject.toml/setup.py, so the package is
+# only importable via src/ on the path. (The Streamlit Dockerfile omits this and relies
+# on the CLI being given a file path instead.)
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH \
+    PYTHONPATH=/app/src \
+    PYTHONUNBUFFERED=1
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+  CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/v1/health').status==200 else 1)"
+
+# Access logging is disabled so the per-request X-LLM-Api-Key header can never be
+# written to stdout.
+CMD ["sh", "-c", "uvicorn wearable_insights.api:app --host 0.0.0.0 --port ${PORT:-8000} --workers ${WEB_CONCURRENCY:-2} --no-access-log"]

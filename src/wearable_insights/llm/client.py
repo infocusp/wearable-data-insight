@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from ..config import ANTHROPIC_API_KEY, MODEL_OPTIONS, WEARABLE_MODEL
+from ..config import MODEL_OPTIONS, WEARABLE_MODEL
 from ..models import ComparisonObject, InsightSet
 from .google_client import make_google_client
+from .keys import resolve_anthropic_key
 from .prompt import SYSTEM_TEXT, build_user_payload
 
 _MAX_TOKENS = 8192
@@ -13,14 +14,15 @@ _MAX_TOKENS = 8192
 # ── Anthropic ─────────────────────────────────────────────────────────────────
 
 def _call_anthropic(comparison: ComparisonObject, model: str) -> InsightSet:
-    if not ANTHROPIC_API_KEY:
+    anthropic_key = resolve_anthropic_key()
+    if not anthropic_key:
         raise RuntimeError(
             "ANTHROPIC_API_KEY is not set. "
             "Export it in your environment before running the LLM pipeline."
         )
     import anthropic
 
-    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    client = anthropic.Anthropic(api_key=anthropic_key)
     messages = build_user_payload(comparison)
 
     # Anthropic system prompt uses cache_control blocks.

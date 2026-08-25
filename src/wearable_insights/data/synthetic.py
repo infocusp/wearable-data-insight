@@ -689,3 +689,36 @@ def generate_today_record(
         "missing_fields": [],
         "invalid_fields": [],
     }
+
+
+# ── Public persona catalog (ClaimGuard integration) ───────────────────────────
+# ``PROFILE_NAMES`` deliberately excludes ``recovery_deficit``, which ``_profile_spec``
+# synthesizes on demand as the MVP demo persona.  API callers need the full set, so it
+# is enumerated separately here rather than by widening PROFILE_NAMES (which would
+# change ``generate_multi_profile_dataset`` output and break golden tests).
+
+PERSONA_NAMES: tuple[str, ...] = ("recovery_deficit", *PROFILE_NAMES)
+
+
+def list_persona_specs() -> list[dict[str, Any]]:
+    """Return public, serializable metadata for every selectable persona.
+
+    Exposes only presentation fields — the latent-state generator parameters
+    (``recovery_base``, drift terms, noise scale, missing probabilities) stay private
+    so the API contract cannot leak the data-generation model.
+    """
+    specs: list[dict[str, Any]] = []
+    for name in PERSONA_NAMES:
+        spec = _profile_spec(name)
+        specs.append(
+            {
+                "persona": name,
+                "engine_user_id": spec.user_id,
+                "display_name": spec.display_name,
+                "dob": spec.dob,
+                "age": spec.age,
+                "gender": spec.gender,
+                "avatar": spec.avatar,
+            }
+        )
+    return specs

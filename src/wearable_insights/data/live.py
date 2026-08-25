@@ -36,6 +36,7 @@ LIVE_SIGNALS: list[dict[str, Any]] = [
 #   wake-up   → HRV depressed right after sleep → recovery / sleep-quality nudge
 #   sedentary → mild HRV depression from prolonged inactivity → low-movement recovery nudge
 #   unwell    → SpO₂ low + skin temp & respiration elevated → vitals nudges
+#   drowsy    → HR + respiration down, HRV depressed → driver-drowsiness assessment
 _MODE_SHIFT: dict[str, dict[str, float]] = {
     "resting":   {"hr": 0.0,  "hrv": 6.0,   "spo2": 0.2,  "skin_temp": 0.0, "resp_rate": -1.0},
     "active":    {"hr": 28.0, "hrv": -16.0, "spo2": -2.4, "skin_temp": 0.9, "resp_rate": 6.0},
@@ -43,9 +44,15 @@ _MODE_SHIFT: dict[str, dict[str, float]] = {
     "wake-up":   {"hr": 4.0,  "hrv": -24.0, "spo2": -0.2, "skin_temp": 0.3, "resp_rate": 0.0},
     "sedentary": {"hr": 8.0,  "hrv": -19.0, "spo2": 0.0,  "skin_temp": 0.0, "resp_rate": 0.0},
     "unwell":    {"hr": 12.0, "hrv": -8.0,  "spo2": -3.0, "skin_temp": 1.4, "resp_rate": 4.0},
+    # Drowsiness onset: sympathetic withdrawal drops HR and respiration, while
+    # accumulated sleep debt keeps HRV suppressed rather than raising it.
+    "drowsy":    {"hr": -6.0,  "hrv": -20.0, "spo2": -0.4, "skin_temp": 0.2, "resp_rate": -2.5},
 }
-_MODE_IDX = {"resting": 0, "active": 1, "stressed": 2, "wake-up": 3, "sedentary": 4, "unwell": 5}
-MODES = ("resting", "active", "stressed", "wake-up", "sedentary", "unwell")
+_MODE_IDX = {
+    "resting": 0, "active": 1, "stressed": 2, "wake-up": 3,
+    "sedentary": 4, "unwell": 5, "drowsy": 6,
+}
+MODES = ("resting", "active", "stressed", "wake-up", "sedentary", "unwell", "drowsy")
 
 # Slow diurnal oscillation amplitude + per-fetch sensor noise.
 _AMPLITUDE = {"hr": 5.0, "hrv": 8.0, "spo2": 0.4, "skin_temp": 0.15, "resp_rate": 1.2}
