@@ -1,0 +1,21 @@
+.git
+.claude
+.specify
+__pycache__
+*.pyc
+.mypy_cache
+.pytest_cache
+.ruff_cache
+.env
+data/
+pmdata/
+pmdata.zip
+*.db
+.streamlit/
+
+# API image: build artifacts not needed at runtime
+specs/
+tests/
+*.docx
+*.md
+!README.md

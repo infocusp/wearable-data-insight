@@ -1,0 +1,3302 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Wearable Insights Engine",
+    "description": "Deterministic wearable analytics with a bounded LLM narrative layer, exposed for ClaimGuard. Server-to-server only.",
+    "version": "1.0"
+  },
+  "paths": {
+    "/v1/health": {
+      "get": {
+        "tags": [
+          "meta"
+        ],
+        "summary": "Health",
+        "operationId": "health_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/personas": {
+      "get": {
+        "tags": [
+          "meta"
+        ],
+        "summary": "Personas",
+        "operationId": "personas_v1_personas_get",
+        "parameters": [
+          {
+            "name": "x-wearable-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wearable-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/diagnostics": {
+      "get": {
+        "tags": [
+          "meta"
+        ],
+        "summary": "Diagnostics",
+        "description": "Cache occupancy and warm state \u2014 operational visibility, no user data.",
+        "operationId": "diagnostics_v1_diagnostics_get",
+        "parameters": [
+          {
+            "name": "x-wearable-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wearable-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Diagnostics V1 Diagnostics Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/comparison": {
+      "post": {
+        "tags": [
+          "analysis"
+        ],
+        "summary": "Comparison",
+        "description": "Deterministic layers only: baselines \u2192 window comparisons \u2192 associations.",
+        "operationId": "comparison_v1_comparison_post",
+        "parameters": [
+          {
+            "name": "x-wearable-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wearable-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyzeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComparisonResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/underwriting/signals": {
+      "post": {
+        "tags": [
+          "underwriting"
+        ],
+        "summary": "Underwriting Signals",
+        "description": "Explainable underwriting signals. Fully deterministic \u2014 no narrative in this build.\n\nThe ``narrative`` field stays ``None`` until the separate underwriting safety profile\nis reviewed and enabled; the deterministic signals are useful to an underwriter on\ntheir own, and shipping them first keeps this surface reviewable in isolation.",
+        "operationId": "underwriting_signals_v1_underwriting_signals_post",
+        "parameters": [
+          {
+            "name": "x-wearable-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wearable-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnderwritingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnderwritingSignalSet"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/wellness/streaks": {
+      "post": {
+        "tags": [
+          "wellness"
+        ],
+        "summary": "Wellness Streaks",
+        "description": "Reward-side branch: streaks, tier, and discount *eligibility* (never an applied discount).",
+        "operationId": "wellness_streaks_v1_wellness_streaks_post",
+        "parameters": [
+          {
+            "name": "x-wearable-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wearable-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StreakRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StreakSet"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/drowsiness/assess": {
+      "post": {
+        "tags": [
+          "driving"
+        ],
+        "summary": "Drowsiness",
+        "description": "Fatigue-risk context for a motor incident. Liability evidence, never fraud evidence.",
+        "operationId": "drowsiness_v1_drowsiness_assess_post",
+        "parameters": [
+          {
+            "name": "x-wearable-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wearable-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DrowsinessRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrowsinessAssessment"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/attestation/mock": {
+      "post": {
+        "tags": [
+          "underwriting"
+        ],
+        "summary": "Attestation",
+        "description": "Mock attestation + credibility, cross-checked against this applicant's own signals.",
+        "operationId": "attestation_v1_attestation_mock_post",
+        "parameters": [
+          {
+            "name": "include_labs",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Include Labs"
+            }
+          },
+          {
+            "name": "x-wearable-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wearable-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnderwritingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttestationBundle"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/nudges": {
+      "post": {
+        "tags": [
+          "wellness"
+        ],
+        "summary": "Nudges",
+        "description": "Risk-side branch: anomalies \u2192 bounded, safety-gated nudge set.\n\nAlways returns 200.  ``comparison`` is deterministic and useful even when the LLM leg\nfails, so an upstream model outage must not cost the caller the analysis as well; the\nfailure is reported in ``error`` instead.  A clean day yields an empty nudge set with\nno LLM call at all.",
+        "operationId": "nudges_v1_nudges_post",
+        "parameters": [
+          {
+            "name": "x-wearable-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wearable-Token"
+            }
+          },
+          {
+            "name": "x-llm-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Llm-Api-Key"
+            }
+          },
+          {
+            "name": "x-llm-provider",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Llm-Provider"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyzeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NudgeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/live/tick": {
+      "post": {
+        "tags": [
+          "wellness"
+        ],
+        "summary": "Live Tick",
+        "description": "Advance the simulated intraday feed one sync and report anything it raised.\n\nThe response carries the *advanced* cursor and the *updated* nudge state, so the\ncaller stores what it receives and never performs clock arithmetic or state\nbookkeeping itself.",
+        "operationId": "live_tick_v1_live_tick_post",
+        "parameters": [
+          {
+            "name": "x-wearable-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wearable-Token"
+            }
+          },
+          {
+            "name": "x-llm-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Llm-Api-Key"
+            }
+          },
+          {
+            "name": "x-llm-provider",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Llm-Provider"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiveTickRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveTickResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comparison-json": {
+      "get": {
+        "tags": [
+          "legacy-001"
+        ],
+        "summary": "Legacy Comparison",
+        "operationId": "legacy_comparison_comparison_json_get",
+        "parameters": [
+          {
+            "name": "persona",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Persona"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "End Date"
+            }
+          },
+          {
+            "name": "analysis_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Analysis Date"
+            }
+          },
+          {
+            "name": "seed",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 42,
+              "title": "Seed"
+            }
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 90,
+              "title": "Days"
+            }
+          },
+          {
+            "name": "x-wearable-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wearable-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComparisonResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/generate-insights": {
+      "post": {
+        "tags": [
+          "legacy-001"
+        ],
+        "summary": "Legacy Generate Insights",
+        "operationId": "legacy_generate_insights_generate_insights_post",
+        "parameters": [
+          {
+            "name": "x-wearable-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wearable-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyzeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NudgeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ingest": {
+      "post": {
+        "tags": [
+          "legacy-001"
+        ],
+        "summary": "Legacy Ingest",
+        "operationId": "legacy_ingest_ingest_post",
+        "parameters": [
+          {
+            "name": "x-wearable-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Wearable-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalyzeRequest": {
+        "properties": {
+          "profile": {
+            "$ref": "#/components/schemas/ProfileRef"
+          },
+          "analysis_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Date",
+            "description": "Day to analyse; defaults to profile.end_date."
+          },
+          "llm": {
+            "$ref": "#/components/schemas/LlmOptions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "profile"
+        ],
+        "title": "AnalyzeRequest"
+      },
+      "Anomaly": {
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/AnomalyCode"
+          },
+          "theme": {
+            "$ref": "#/components/schemas/AnomalyTheme"
+          },
+          "severity": {
+            "$ref": "#/components/schemas/AnomalySeverity"
+          },
+          "signals": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Signals"
+          },
+          "evaluation_tag": {
+            "type": "string",
+            "title": "Evaluation Tag"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "theme",
+          "severity",
+          "signals",
+          "evaluation_tag",
+          "detail"
+        ],
+        "title": "Anomaly",
+        "description": "Deterministically detected deviation for one day (FR-002, FR-021)."
+      },
+      "AnomalyCode": {
+        "type": "string",
+        "enum": [
+          "stress_elevated",
+          "steps_low",
+          "active_minutes_low",
+          "sleep_insufficient",
+          "sleep_quality_low",
+          "hrv_depressed",
+          "hr_elevated",
+          "spo2_low",
+          "skin_temp_elevated",
+          "resp_rate_elevated"
+        ],
+        "title": "AnomalyCode"
+      },
+      "AnomalySeverity": {
+        "type": "string",
+        "enum": [
+          "moderate",
+          "significant",
+          "critical"
+        ],
+        "title": "AnomalySeverity"
+      },
+      "AnomalyTheme": {
+        "type": "string",
+        "enum": [
+          "sleep",
+          "recovery",
+          "activity",
+          "stress",
+          "vitals"
+        ],
+        "title": "AnomalyTheme"
+      },
+      "AttestationBundle": {
+        "properties": {
+          "attestation_id": {
+            "type": "string",
+            "title": "Attestation Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date",
+            "title": "Generated At"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed"
+          },
+          "is_mock": {
+            "type": "boolean",
+            "const": true,
+            "title": "Is Mock",
+            "description": "Always true. Every rendering surface must label this a mock.",
+            "default": true
+          },
+          "self_reported": {
+            "$ref": "#/components/schemas/SelfReported"
+          },
+          "mock_labs": {
+            "items": {
+              "$ref": "#/components/schemas/LabResult"
+            },
+            "type": "array",
+            "title": "Mock Labs"
+          },
+          "consistency_checks": {
+            "items": {
+              "$ref": "#/components/schemas/ConsistencyCheck"
+            },
+            "type": "array",
+            "title": "Consistency Checks"
+          },
+          "credibility": {
+            "$ref": "#/components/schemas/Credibility"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "Mock attestation standing in for an electronic health record / laboratory integration. Generated data \u2014 not a real medical record, and not a diagnosis."
+          },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "1.0"
+          }
+        },
+        "type": "object",
+        "required": [
+          "attestation_id",
+          "user_id",
+          "generated_at",
+          "seed",
+          "self_reported",
+          "credibility"
+        ],
+        "title": "AttestationBundle"
+      },
+      "CandidateAssociation": {
+        "properties": {
+          "relation": {
+            "type": "string",
+            "title": "Relation"
+          },
+          "signals": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Signals"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "kind": {
+            "type": "string",
+            "const": "association",
+            "title": "Kind",
+            "default": "association"
+          }
+        },
+        "type": "object",
+        "required": [
+          "relation",
+          "signals",
+          "description"
+        ],
+        "title": "CandidateAssociation",
+        "description": "Non-causal co-occurrence produced by a defined rule (FR-010)."
+      },
+      "ComparisonObject": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "analysis_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Analysis Date"
+          },
+          "sleep": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/MetricComparison"
+            },
+            "type": "object",
+            "title": "Sleep"
+          },
+          "heart_health": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/MetricComparison"
+            },
+            "type": "object",
+            "title": "Heart Health"
+          },
+          "activity": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/MetricComparison"
+            },
+            "type": "object",
+            "title": "Activity"
+          },
+          "candidate_associations": {
+            "items": {
+              "$ref": "#/components/schemas/CandidateAssociation"
+            },
+            "type": "array",
+            "title": "Candidate Associations"
+          },
+          "data_quality": {
+            "$ref": "#/components/schemas/DataQuality"
+          },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "1.0"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "analysis_date"
+        ],
+        "title": "ComparisonObject",
+        "description": "Compact, LLM-facing contract between analysis and inference (FR-009)."
+      },
+      "ComparisonResponse": {
+        "properties": {
+          "comparison": {
+            "$ref": "#/components/schemas/ComparisonObject"
+          },
+          "profile_meta": {
+            "$ref": "#/components/schemas/ProfileMeta"
+          },
+          "engine_version": {
+            "type": "string",
+            "title": "Engine Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "comparison",
+          "profile_meta",
+          "engine_version"
+        ],
+        "title": "ComparisonResponse"
+      },
+      "ConsistencyCheck": {
+        "properties": {
+          "check": {
+            "type": "string",
+            "title": "Check"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "consistent",
+              "inconsistent",
+              "unverifiable"
+            ],
+            "title": "Verdict"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "check",
+          "verdict",
+          "detail"
+        ],
+        "title": "ConsistencyCheck"
+      },
+      "Contributor": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit",
+            "default": ""
+          },
+          "baseline": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Baseline"
+          },
+          "percentage_change": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percentage Change"
+          },
+          "sub_score": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Sub Score",
+            "description": "This factor's own 0-100 contribution.",
+            "default": 0
+          },
+          "weight": {
+            "type": "number",
+            "title": "Weight",
+            "default": 0.0
+          },
+          "trend": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down",
+              "stable"
+            ],
+            "title": "Trend",
+            "default": "stable"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "label"
+        ],
+        "title": "Contributor",
+        "description": "One weighted input, carrying its own evidence so the score is explainable."
+      },
+      "Credibility": {
+        "properties": {
+          "score_0_100": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Score 0 100"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "low",
+              "moderate",
+              "high"
+            ],
+            "title": "Level"
+          },
+          "drivers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Drivers"
+          }
+        },
+        "type": "object",
+        "required": [
+          "score_0_100",
+          "level"
+        ],
+        "title": "Credibility"
+      },
+      "DataQuality": {
+        "properties": {
+          "missing_fields": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Missing Fields"
+          },
+          "invalid_fields": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Invalid Fields"
+          },
+          "low_confidence": {
+            "type": "boolean",
+            "title": "Low Confidence",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "DataQuality"
+      },
+      "DrowsinessAssessment": {
+        "properties": {
+          "assessment_id": {
+            "type": "string",
+            "title": "Assessment Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "incident_at": {
+            "type": "string",
+            "title": "Incident At"
+          },
+          "window_minutes": {
+            "type": "integer",
+            "title": "Window Minutes"
+          },
+          "drowsiness_score": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Drowsiness Score",
+            "description": "Higher means more drowsy."
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "alert",
+              "mild",
+              "moderate",
+              "severe"
+            ],
+            "title": "Level"
+          },
+          "confidence": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          },
+          "contributors": {
+            "items": {
+              "$ref": "#/components/schemas/Contributor"
+            },
+            "type": "array",
+            "title": "Contributors"
+          },
+          "timeline": {
+            "items": {
+              "$ref": "#/components/schemas/TimelinePoint"
+            },
+            "type": "array",
+            "title": "Timeline"
+          },
+          "episodes": {
+            "items": {
+              "$ref": "#/components/schemas/Episode"
+            },
+            "type": "array",
+            "title": "Episodes"
+          },
+          "evidence_summary": {
+            "type": "string",
+            "title": "Evidence Summary",
+            "default": ""
+          },
+          "low_confidence": {
+            "type": "boolean",
+            "title": "Low Confidence",
+            "default": false
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "Derived from voluntarily shared wearable data as corroborating context for how an incident occurred. It indicates fatigue risk, not fraud, and is not a medical assessment. It must be reviewed by a human adjuster alongside other evidence."
+          },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "1.0"
+          }
+        },
+        "type": "object",
+        "required": [
+          "assessment_id",
+          "user_id",
+          "incident_at",
+          "window_minutes",
+          "drowsiness_score",
+          "level",
+          "confidence"
+        ],
+        "title": "DrowsinessAssessment"
+      },
+      "DrowsinessRequest": {
+        "properties": {
+          "profile": {
+            "$ref": "#/components/schemas/ProfileRef"
+          },
+          "incident_at": {
+            "type": "string",
+            "title": "Incident At",
+            "description": "ISO-8601 local datetime of the incident, e.g. '2026-08-24T07:40'."
+          },
+          "window_minutes": {
+            "type": "integer",
+            "maximum": 600.0,
+            "minimum": 30.0,
+            "title": "Window Minutes",
+            "default": 120
+          },
+          "continuous_drive_minutes": {
+            "type": "integer",
+            "maximum": 1440.0,
+            "minimum": 0.0,
+            "title": "Continuous Drive Minutes",
+            "description": "Self-reported/telematics drive duration before the incident.",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "profile",
+          "incident_at"
+        ],
+        "title": "DrowsinessRequest"
+      },
+      "Episode": {
+        "properties": {
+          "started_at": {
+            "type": "string",
+            "title": "Started At"
+          },
+          "ended_at": {
+            "type": "string",
+            "title": "Ended At"
+          },
+          "peak_score": {
+            "type": "integer",
+            "title": "Peak Score"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "alert",
+              "mild",
+              "moderate",
+              "severe"
+            ],
+            "title": "Level"
+          },
+          "duration_minutes": {
+            "type": "integer",
+            "title": "Duration Minutes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "started_at",
+          "ended_at",
+          "peak_score",
+          "level",
+          "duration_minutes"
+        ],
+        "title": "Episode"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "type": "string",
+            "title": "Error"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "violations": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Violations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "title": "ErrorResponse",
+        "description": "Matches the error envelope of the existing 001 REST contract."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status"
+          },
+          "engine_version": {
+            "type": "string",
+            "title": "Engine Version"
+          },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version"
+          },
+          "default_model": {
+            "type": "string",
+            "title": "Default Model"
+          },
+          "personas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Personas"
+          },
+          "baselines_warm": {
+            "type": "boolean",
+            "title": "Baselines Warm"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "engine_version",
+          "schema_version",
+          "default_model",
+          "personas",
+          "baselines_warm"
+        ],
+        "title": "HealthResponse"
+      },
+      "Insight": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Confidence"
+          },
+          "source_signals": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Source Signals"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "summary",
+          "action",
+          "confidence",
+          "source_signals"
+        ],
+        "title": "Insight",
+        "description": "One user-facing, schema-validated insight (FR-013)."
+      },
+      "LabResult": {
+        "properties": {
+          "panel": {
+            "type": "string",
+            "title": "Panel"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "ref_low": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ref Low"
+          },
+          "ref_high": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ref High"
+          },
+          "flag": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "high",
+              "low"
+            ],
+            "title": "Flag",
+            "default": "normal"
+          }
+        },
+        "type": "object",
+        "required": [
+          "panel",
+          "name",
+          "value",
+          "unit"
+        ],
+        "title": "LabResult"
+      },
+      "LiveCursor": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "resting",
+              "active",
+              "stressed",
+              "wake-up",
+              "sedentary",
+              "unwell",
+              "drowsy"
+            ],
+            "title": "Mode",
+            "default": "resting"
+          },
+          "device_minute": {
+            "type": "integer",
+            "maximum": 1439.0,
+            "minimum": 0.0,
+            "title": "Device Minute",
+            "description": "Minute-of-day; 480 = 08:00.",
+            "default": 480
+          },
+          "points": {
+            "type": "integer",
+            "maximum": 288.0,
+            "minimum": 1.0,
+            "title": "Points",
+            "description": "Rolling buffer length.",
+            "default": 48
+          },
+          "step": {
+            "type": "integer",
+            "maximum": 60.0,
+            "minimum": 1.0,
+            "title": "Step",
+            "description": "Device minutes advanced per sync.",
+            "default": 5
+          },
+          "day_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "weekday",
+                  "weekend"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Day Type",
+            "description": "Derived from analysis_date when omitted."
+          }
+        },
+        "type": "object",
+        "title": "LiveCursor",
+        "description": "Position in the simulated intraday feed \u2014 replaces the Streamlit deque.\n\n``seed_buffer`` is pure, so the whole rolling buffer is reconstructible from these\nfive fields.  The response echoes back an *advanced* cursor, so the caller never\nperforms clock arithmetic itself."
+      },
+      "LiveNudgeStateEntry": {
+        "properties": {
+          "active": {
+            "type": "boolean",
+            "title": "Active",
+            "default": false
+          },
+          "last_raised_ts": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Raised Ts"
+          }
+        },
+        "type": "object",
+        "title": "LiveNudgeStateEntry",
+        "description": "One anomaly code's episode/cooldown state, keyed by AnomalyCode value."
+      },
+      "LiveSample": {
+        "properties": {
+          "minute": {
+            "type": "integer",
+            "title": "Minute"
+          },
+          "clock": {
+            "type": "string",
+            "title": "Clock"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "hr": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hr"
+          },
+          "hrv": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hrv"
+          },
+          "spo2": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spo2"
+          },
+          "skin_temp": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Skin Temp"
+          },
+          "resp_rate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resp Rate"
+          },
+          "status": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Status",
+            "description": "Per-signal ok/warn/crit/neutral."
+          }
+        },
+        "type": "object",
+        "required": [
+          "minute",
+          "clock",
+          "mode"
+        ],
+        "title": "LiveSample"
+      },
+      "LiveTickRequest": {
+        "properties": {
+          "profile": {
+            "$ref": "#/components/schemas/ProfileRef"
+          },
+          "cursor": {
+            "$ref": "#/components/schemas/LiveCursor"
+          },
+          "analysis_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Date"
+          },
+          "nudge_state": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/LiveNudgeStateEntry"
+            },
+            "type": "object",
+            "title": "Nudge State",
+            "description": "Round-tripped episode/cooldown state. Send back what you last received."
+          },
+          "now": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Now",
+            "description": "Caller clock (epoch seconds) for deterministic cooldown in tests."
+          },
+          "generate_nudges": {
+            "type": "boolean",
+            "title": "Generate Nudges",
+            "default": true
+          },
+          "llm": {
+            "$ref": "#/components/schemas/LlmOptions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "profile"
+        ],
+        "title": "LiveTickRequest"
+      },
+      "LiveTickResponse": {
+        "properties": {
+          "samples": {
+            "items": {
+              "$ref": "#/components/schemas/LiveSample"
+            },
+            "type": "array",
+            "title": "Samples"
+          },
+          "latest": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LiveSample"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "anomalies": {
+            "items": {
+              "$ref": "#/components/schemas/Anomaly"
+            },
+            "type": "array",
+            "title": "Anomalies"
+          },
+          "new_anomalies": {
+            "items": {
+              "$ref": "#/components/schemas/Anomaly"
+            },
+            "type": "array",
+            "title": "New Anomalies",
+            "description": "Anomalies passing episode/cooldown de-duplication."
+          },
+          "nudges": {
+            "items": {
+              "$ref": "#/components/schemas/Nudge"
+            },
+            "type": "array",
+            "title": "Nudges"
+          },
+          "nudge_state": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/LiveNudgeStateEntry"
+            },
+            "type": "object",
+            "title": "Nudge State",
+            "description": "Persist this and send it back on the next tick."
+          },
+          "cursor": {
+            "$ref": "#/components/schemas/LiveCursor",
+            "description": "Already advanced \u2014 store as-is."
+          },
+          "slot": {
+            "type": "integer",
+            "title": "Slot"
+          },
+          "slot_label": {
+            "type": "string",
+            "title": "Slot Label"
+          },
+          "day_type": {
+            "type": "string",
+            "enum": [
+              "weekday",
+              "weekend"
+            ],
+            "title": "Day Type"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "samples",
+          "cursor",
+          "slot",
+          "slot_label",
+          "day_type"
+        ],
+        "title": "LiveTickResponse"
+      },
+      "LlmOptions": {
+        "properties": {
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model",
+            "description": "Must be a key of config.MODEL_OPTIONS."
+          },
+          "max_retries": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 5.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Retries"
+          },
+          "skip_llm": {
+            "type": "boolean",
+            "title": "Skip Llm",
+            "description": "Run only the deterministic layers and return them.",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "LlmOptions",
+        "description": "Per-request model selection for the LLM-backed endpoints."
+      },
+      "MetricComparison": {
+        "properties": {
+          "current_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Value"
+          },
+          "weekly": {
+            "$ref": "#/components/schemas/WindowComparison"
+          },
+          "monthly": {
+            "$ref": "#/components/schemas/WindowComparison"
+          },
+          "weekday": {
+            "$ref": "#/components/schemas/WindowComparison"
+          },
+          "sixty_day": {
+            "$ref": "#/components/schemas/WindowComparison"
+          },
+          "ninety_day": {
+            "$ref": "#/components/schemas/WindowComparison"
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Flags"
+          }
+        },
+        "type": "object",
+        "title": "MetricComparison",
+        "description": "Current-vs-baseline comparison for a single metric across windows (FR-009)."
+      },
+      "Nudge": {
+        "properties": {
+          "nudge_id": {
+            "type": "string",
+            "title": "Nudge Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "analysis_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Analysis Date"
+          },
+          "theme": {
+            "$ref": "#/components/schemas/AnomalyTheme"
+          },
+          "severity": {
+            "$ref": "#/components/schemas/AnomalySeverity"
+          },
+          "anomalies": {
+            "items": {
+              "$ref": "#/components/schemas/Anomaly"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Anomalies"
+          },
+          "insight": {
+            "$ref": "#/components/schemas/Insight"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer"
+          },
+          "triggered_by": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Triggered By"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nudge_id",
+          "user_id",
+          "analysis_date",
+          "theme",
+          "severity",
+          "anomalies",
+          "insight",
+          "disclaimer",
+          "triggered_by"
+        ],
+        "title": "Nudge",
+        "description": "User-facing item wrapping one Insight, raised from \u22651 anomalies (FR-003, FR-007)."
+      },
+      "NudgeResponse": {
+        "properties": {
+          "comparison": {
+            "$ref": "#/components/schemas/ComparisonObject"
+          },
+          "nudge_set": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NudgeSet"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "max_nudges_per_day": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Nudges Per Day"
+          },
+          "llm_skipped": {
+            "type": "boolean",
+            "title": "Llm Skipped",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "comparison"
+        ],
+        "title": "NudgeResponse",
+        "description": "Note the deliberate 200-with-``error`` contract.\n\n``comparison`` is deterministic and useful even when the LLM leg fails, so an upstream\nmodel outage is reported here rather than as an HTTP error status that would throw the\nanalysis away along with the narrative."
+      },
+      "NudgeSet": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "analysis_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Analysis Date"
+          },
+          "nudges": {
+            "items": {
+              "$ref": "#/components/schemas/Nudge"
+            },
+            "type": "array",
+            "title": "Nudges"
+          },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "1.0"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "analysis_date"
+        ],
+        "title": "NudgeSet",
+        "description": "Bounded daily nudge collection (FR-005, FR-006, SC-008)."
+      },
+      "PersonaListResponse": {
+        "properties": {
+          "personas": {
+            "items": {
+              "$ref": "#/components/schemas/PersonaSpec"
+            },
+            "type": "array",
+            "title": "Personas"
+          }
+        },
+        "type": "object",
+        "required": [
+          "personas"
+        ],
+        "title": "PersonaListResponse"
+      },
+      "PersonaSpec": {
+        "properties": {
+          "persona": {
+            "type": "string",
+            "title": "Persona"
+          },
+          "engine_user_id": {
+            "type": "string",
+            "title": "Engine User Id"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "dob": {
+            "type": "string",
+            "title": "Dob"
+          },
+          "age": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age"
+          },
+          "gender": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gender"
+          },
+          "avatar": {
+            "type": "string",
+            "title": "Avatar"
+          }
+        },
+        "type": "object",
+        "required": [
+          "persona",
+          "engine_user_id",
+          "display_name",
+          "dob",
+          "avatar"
+        ],
+        "title": "PersonaSpec"
+      },
+      "PillarFlags": {
+        "properties": {
+          "activity": {
+            "type": "string",
+            "enum": [
+              "green",
+              "amber",
+              "neutral"
+            ],
+            "title": "Activity",
+            "default": "neutral"
+          },
+          "sleep": {
+            "type": "string",
+            "enum": [
+              "green",
+              "amber",
+              "neutral"
+            ],
+            "title": "Sleep",
+            "default": "neutral"
+          },
+          "recovery": {
+            "type": "string",
+            "enum": [
+              "green",
+              "amber",
+              "neutral"
+            ],
+            "title": "Recovery",
+            "default": "neutral"
+          }
+        },
+        "type": "object",
+        "title": "PillarFlags"
+      },
+      "ProfileMeta": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "persona": {
+            "type": "string",
+            "title": "Persona"
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "dob": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dob"
+          },
+          "age": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age"
+          },
+          "gender": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gender"
+          },
+          "avatar": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar"
+          },
+          "record_count": {
+            "type": "integer",
+            "title": "Record Count"
+          },
+          "first_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Date"
+          },
+          "last_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "persona",
+          "record_count"
+        ],
+        "title": "ProfileMeta",
+        "description": "Non-metric identity echoed back so callers can render a profile card."
+      },
+      "ProfileRef": {
+        "properties": {
+          "persona": {
+            "type": "string",
+            "enum": [
+              "recovery_deficit",
+              "healthy_consistent",
+              "poor_sleep_week",
+              "low_activity",
+              "recovery_decline"
+            ],
+            "title": "Persona"
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id",
+            "description": "Caller-scoped id (e.g. 'cg_user_7'); overrides the engine default."
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "default": 42
+          },
+          "days": {
+            "type": "integer",
+            "maximum": 400.0,
+            "minimum": 1.0,
+            "title": "Days",
+            "default": 90
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "title": "End Date",
+            "description": "Last date in the generated series. REQUIRED: the engine must never fall back to date.today() in a request path, or responses change silently at UTC midnight and differ between caller and sidecar timezones."
+          },
+          "jitter": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Jitter",
+            "default": 0.0
+          }
+        },
+        "type": "object",
+        "required": [
+          "persona",
+          "end_date"
+        ],
+        "title": "ProfileRef",
+        "description": "A reproducible pointer to a synthetic wearable history.\n\nThis is the whole persistence story for wearable data: ClaimGuard stores these six\nfields on ``WearableProfile`` and the engine reconstructs the identical 90-day series\non demand.  Nothing about the series itself is ever stored."
+      },
+      "SelfReported": {
+        "properties": {
+          "height_cm": {
+            "type": "integer",
+            "title": "Height Cm"
+          },
+          "weight_kg": {
+            "type": "number",
+            "title": "Weight Kg"
+          },
+          "bmi": {
+            "type": "number",
+            "title": "Bmi"
+          },
+          "smoker": {
+            "type": "boolean",
+            "title": "Smoker"
+          },
+          "alcohol_units_week": {
+            "type": "integer",
+            "title": "Alcohol Units Week"
+          },
+          "exercise_sessions_claimed": {
+            "type": "integer",
+            "title": "Exercise Sessions Claimed",
+            "description": "Self-declared weekly exercise sessions \u2014 the field cross-checked against wearable data."
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/components/schemas/SelfReportedCondition"
+            },
+            "type": "array",
+            "title": "Conditions"
+          },
+          "medications": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Medications"
+          },
+          "family_history": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Family History"
+          },
+          "hospitalizations_5y": {
+            "type": "integer",
+            "title": "Hospitalizations 5Y",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "height_cm",
+          "weight_kg",
+          "bmi",
+          "smoker",
+          "alcohol_units_week",
+          "exercise_sessions_claimed"
+        ],
+        "title": "SelfReported"
+      },
+      "SelfReportedCondition": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "diagnosed_year": {
+            "type": "integer",
+            "title": "Diagnosed Year"
+          },
+          "controlled": {
+            "type": "boolean",
+            "title": "Controlled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "label",
+          "diagnosed_year",
+          "controlled"
+        ],
+        "title": "SelfReportedCondition"
+      },
+      "StreakDay": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "green",
+              "amber",
+              "neutral"
+            ],
+            "title": "State"
+          },
+          "pillars": {
+            "$ref": "#/components/schemas/PillarFlags"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "state",
+          "pillars"
+        ],
+        "title": "StreakDay"
+      },
+      "StreakRequest": {
+        "properties": {
+          "profile": {
+            "$ref": "#/components/schemas/ProfileRef"
+          },
+          "analysis_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Date"
+          },
+          "lookback_days": {
+            "type": "integer",
+            "maximum": 400.0,
+            "minimum": 7.0,
+            "title": "Lookback Days",
+            "default": 90
+          }
+        },
+        "type": "object",
+        "required": [
+          "profile"
+        ],
+        "title": "StreakRequest"
+      },
+      "StreakSet": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "analysis_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Analysis Date"
+          },
+          "lookback_days": {
+            "type": "integer",
+            "title": "Lookback Days"
+          },
+          "current_streak": {
+            "type": "integer",
+            "title": "Current Streak"
+          },
+          "longest_streak": {
+            "type": "integer",
+            "title": "Longest Streak"
+          },
+          "pillar_streaks": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Pillar Streaks"
+          },
+          "days": {
+            "items": {
+              "$ref": "#/components/schemas/StreakDay"
+            },
+            "type": "array",
+            "title": "Days"
+          },
+          "tier": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tier"
+          },
+          "next_tier": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Tier"
+          },
+          "days_to_next_tier": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Days To Next Tier"
+          },
+          "discount_eligible": {
+            "type": "boolean",
+            "title": "Discount Eligible",
+            "default": false
+          },
+          "discount_pct_suggested": {
+            "type": "integer",
+            "title": "Discount Pct Suggested",
+            "default": 0
+          },
+          "rationale": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Rationale"
+          },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "1.0"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "analysis_date",
+          "lookback_days",
+          "current_streak",
+          "longest_streak"
+        ],
+        "title": "StreakSet"
+      },
+      "TimelinePoint": {
+        "properties": {
+          "minute_offset": {
+            "type": "integer",
+            "title": "Minute Offset"
+          },
+          "clock": {
+            "type": "string",
+            "title": "Clock"
+          },
+          "drowsiness_score": {
+            "type": "integer",
+            "title": "Drowsiness Score"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "alert",
+              "mild",
+              "moderate",
+              "severe"
+            ],
+            "title": "Level"
+          }
+        },
+        "type": "object",
+        "required": [
+          "minute_offset",
+          "clock",
+          "drowsiness_score",
+          "level"
+        ],
+        "title": "TimelinePoint"
+      },
+      "UnderwritingComposite": {
+        "properties": {
+          "consistency": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Consistency"
+          },
+          "completeness": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Completeness"
+          },
+          "volatility": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Volatility"
+          }
+        },
+        "type": "object",
+        "required": [
+          "consistency",
+          "completeness",
+          "volatility"
+        ],
+        "title": "UnderwritingComposite",
+        "description": "The three headline tiles. `volatility` is the only risk-polarity number."
+      },
+      "UnderwritingRequest": {
+        "properties": {
+          "profile": {
+            "$ref": "#/components/schemas/ProfileRef"
+          },
+          "analysis_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Date"
+          },
+          "window_days": {
+            "type": "integer",
+            "maximum": 400.0,
+            "minimum": 7.0,
+            "title": "Window Days",
+            "default": 90
+          }
+        },
+        "type": "object",
+        "required": [
+          "profile"
+        ],
+        "title": "UnderwritingRequest"
+      },
+      "UnderwritingSignal": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "enum": [
+              "activity_consistency",
+              "sleep_regularity",
+              "cardiac_stability",
+              "data_completeness"
+            ],
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "score": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Score",
+            "description": "Higher is always more stable/favorable."
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "favorable",
+              "neutral",
+              "attention"
+            ],
+            "title": "Direction"
+          },
+          "metrics": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Metrics",
+            "description": "Provenance: exact ComparisonObject metric keys."
+          },
+          "evaluation_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Evaluation Tags"
+          },
+          "days_with_data": {
+            "type": "integer",
+            "title": "Days With Data",
+            "default": 0
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "description": "Deterministic template text \u2014 never LLM-authored.",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "label",
+          "score",
+          "direction"
+        ],
+        "title": "UnderwritingSignal",
+        "description": "One explainable signal shown as a row in the underwriter's report."
+      },
+      "UnderwritingSignalSet": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "analysis_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Analysis Date"
+          },
+          "window_days": {
+            "type": "integer",
+            "title": "Window Days"
+          },
+          "signals": {
+            "items": {
+              "$ref": "#/components/schemas/UnderwritingSignal"
+            },
+            "type": "array",
+            "title": "Signals"
+          },
+          "composite": {
+            "$ref": "#/components/schemas/UnderwritingComposite"
+          },
+          "data_coverage_pct": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Data Coverage Pct"
+          },
+          "low_confidence": {
+            "type": "boolean",
+            "title": "Low Confidence",
+            "default": false
+          },
+          "attention_points": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Attention Points"
+          },
+          "narrative": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Narrative"
+          },
+          "safety_profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Safety Profile"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "This is a decision-support signal derived from voluntarily shared wellness data. It is not a medical assessment, contains no diagnosis, and must not be the sole basis for an underwriting decision. All signals require human review."
+          },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "1.0"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "analysis_date",
+          "window_days",
+          "signals",
+          "composite",
+          "data_coverage_pct"
+        ],
+        "title": "UnderwritingSignalSet"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "WindowComparison": {
+        "properties": {
+          "baseline_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Baseline Value"
+          },
+          "percentage_change": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percentage Change"
+          },
+          "trend": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down",
+              "stable"
+            ],
+            "title": "Trend",
+            "default": "stable"
+          },
+          "evaluation_tag": {
+            "type": "string",
+            "enum": [
+              "Significantly Elevated",
+              "Significantly Depressed",
+              "Critically Elevated",
+              "Critically Depressed",
+              "Stable / Within Normal Baseline"
+            ],
+            "title": "Evaluation Tag",
+            "default": "Stable / Within Normal Baseline"
+          }
+        },
+        "type": "object",
+        "title": "WindowComparison",
+        "description": "Comparison of current value vs. one named baseline window."
+      }
+    }
+  }
+}
