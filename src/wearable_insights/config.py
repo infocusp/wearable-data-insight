@@ -14,18 +14,39 @@ from dotenv import load_dotenv
 # Load .env from the repo root (two levels up from this file); silently skipped if absent.
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
+
+def _secret_or_env(key: str) -> str | None:
+    """Look up ``key`` in the environment, falling back to Streamlit secrets.
+
+    Streamlit Community Cloud's "Secrets" panel is the only way to configure
+    credentials there (no shell env, no .env file). It mirrors secrets into
+    os.environ on most versions, but importing streamlit / touching st.secrets
+    is unsafe outside a running app (e.g. plain CLI usage, or no secrets.toml
+    present locally) — hence the broad except.
+    """
+    val = os.getenv(key)
+    if val:
+        return val
+    try:
+        import streamlit as st
+
+        return st.secrets.get(key)
+    except Exception:
+        return None
+
+
 # ── LLM settings ──────────────────────────────────────────────────────────────
 
-ANTHROPIC_API_KEY: str | None = os.getenv("ANTHROPIC_API_KEY")
+ANTHROPIC_API_KEY: str | None = _secret_or_env("ANTHROPIC_API_KEY")
 
 # GCP project config for Vertex AI (local dev auth via `gcloud auth application-default login`).
-GCP_PROJECT: str | None = os.getenv("GCP_PROJECT")
+GCP_PROJECT: str | None = _secret_or_env("GCP_PROJECT")
 GCP_LOCATION: str = os.getenv("GCP_LOCATION", "us-central1")
 
 # Gemini Developer API key (AI Studio) — simpler alternative to Vertex AI for
 # environments without GCP service-account credentials (e.g. hosted demos).
 # When both are set, GEMINI_API_KEY takes precedence; see llm/google_client.py.
-GEMINI_API_KEY: str | None = os.getenv("GEMINI_API_KEY")
+GEMINI_API_KEY: str | None = _secret_or_env("GEMINI_API_KEY")
 
 # Default model — override via WEARABLE_MODEL env var.
 WEARABLE_MODEL: str = os.getenv("WEARABLE_MODEL", "gemini-2.5-flash-lite")
