@@ -14,6 +14,19 @@ from datetime import date
 
 import streamlit as st
 
+# Bridge Streamlit secrets (st.secrets) into os.environ *before* wearable_insights.config
+# is imported below, since config.py reads credentials via os.getenv() at import time.
+# Needed for Streamlit Community Cloud deploys, where secrets live in the app's Secrets
+# manager (TOML) rather than a real .env file; harmless locally/in Docker where the
+# real env vars already win via setdefault.
+try:
+    import os
+
+    for _key, _val in st.secrets.items():
+        os.environ.setdefault(_key, str(_val))
+except Exception:
+    pass
+
 from wearable_insights import memory, store
 from wearable_insights.config import (
     DEVICE_SAMPLE_MINUTES,
